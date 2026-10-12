@@ -41,6 +41,10 @@ namespace wt_lab7_7postgres_efcore_krutalevich.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FlightNumber")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -63,6 +67,7 @@ namespace wt_lab7_7postgres_efcore_krutalevich.Migrations
                             Arrival = "Варшава",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Departure = "Минск",
+                            Description = "",
                             FlightNumber = "AV-101",
                             IsAvailable = true,
                             Price = 250m
@@ -73,6 +78,7 @@ namespace wt_lab7_7postgres_efcore_krutalevich.Migrations
                             Arrival = "Берлин",
                             CreatedAt = new DateTime(2026, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
                             Departure = "Минск",
+                            Description = "",
                             FlightNumber = "AV-202",
                             IsAvailable = true,
                             Price = 320m
@@ -83,6 +89,7 @@ namespace wt_lab7_7postgres_efcore_krutalevich.Migrations
                             Arrival = "Москва",
                             CreatedAt = new DateTime(2026, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
                             Departure = "Гомель",
+                            Description = "",
                             FlightNumber = "AV-303",
                             IsAvailable = false,
                             Price = 180m

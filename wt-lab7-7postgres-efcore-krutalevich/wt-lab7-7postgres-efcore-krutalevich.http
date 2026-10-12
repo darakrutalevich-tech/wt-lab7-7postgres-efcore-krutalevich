@@ -1,4 +1,4 @@
-@host = http://localhost:5154
+@host = https://wt-lab7-7postgres-efcore-krutalevich.onrender.com
 
 ### 1. —писок Ч пусто
 GET {{host}}/api/flights
@@ -98,4 +98,53 @@ Content-Type: application/json
 }
 
 ### GET после POST Ч увидеть созданные рейсы
+GET {{host}}/api/flights
+
+
+### дл€ 34 пункта
+### 1. —писок Ч 3 рейса (seed)
+GET {{host}}/api/flights
+
+### 2. POST Ч создать новый рейс
+POST {{host}}/api/flights
+Content-Type: application/json
+
+{
+  "flightNumber": "CLOUD-1",
+  "departure": "ћинск",
+  "arrival": "’ельсинки",
+  "price": 400,
+  "isAvailable": true,
+  "createdAt": "2026-10-12T15:00:00Z"
+}
+
+### 3. ѕроверка Ч 4 рейса
+GET {{host}}/api/flights
+
+### 4. GET нового рейса
+GET {{host}}/api/flights/4
+
+### 5. PUT Ч обновить
+PUT {{host}}/api/flights/4
+Content-Type: application/json
+
+{
+  "flightNumber": "CLOUD-1-NEW",
+  "departure": "ћинск",
+  "arrival": "“аллин",
+  "price": 420,
+  "isAvailable": true,
+  "createdAt": "2026-10-12T15:00:00Z"
+}
+
+### 6. ѕроверка после PUT
+GET {{host}}/api/flights/4
+
+### 7. DELETE
+DELETE {{host}}/api/flights/4
+
+### 8. GET удалЄнного Ч 404
+GET {{host}}/api/flights/4
+
+### 9. »тоговый список Ч снова 3 рейса
 GET {{host}}/api/flights

@@ -23,5 +23,7 @@ namespace wt_lab7_7postgres_efcore_krutalevich.Models
         public bool IsAvailable { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public string Description { get; set; } = "";
     }
 }
