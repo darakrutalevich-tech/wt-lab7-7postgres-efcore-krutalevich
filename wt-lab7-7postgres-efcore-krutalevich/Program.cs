@@ -34,29 +34,29 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-// Áëîê 1, óðîâåíü 2: ïðîâåðêà çàïóñêà
-app.MapGet("/", () => "Minimal API ðàáîòàåò!");
+// Ð‘Ð»Ð¾Ðº 1, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 2: Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð·Ð°Ð¿ÑƒÑÐºÐ°
+app.MapGet("/", () => "Minimal API Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚!");
 
-// Áëîê 1, óðîâåíü 3: èíôîðìàöèÿ î ïðèëîæåíèè
+// Ð‘Ð»Ð¾Ðº 1, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 3: Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ð¸
 app.MapGet("/api/info", () =>
 {
     return new
     {
         Application = "Web Technologies",
         Technology = "ASP.NET Core Minimal API",
-        Variant = "Àâèàêîìïàíèÿ",
+        Variant = "ÐÐ²Ð¸Ð°ÐºÐ¾Ð¼Ð¿Ð°Ð½Ð¸Ñ",
         Version = "1.1",
         Updated = DateTime.UtcNow
     };
 });
 
-//// Áëîê 3, óðîâåíü 1: ñïèñîê âñåõ ðåéñîâ
+//// Ð‘Ð»Ð¾Ðº 3, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 1: ÑÐ¿Ð¸ÑÐ¾Ðº Ð²ÑÐµÑ… Ñ€ÐµÐ¹ÑÐ¾Ð²
 //app.MapGet("/api/flights", () =>
 //{
 //    return Results.Ok(FlightStore.Flights);
 //});
 
-//Áëîê 3, óðîâåíü 2: ðåéñ ïî Id
+//Ð‘Ð»Ð¾Ðº 3, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 2: Ñ€ÐµÐ¹Ñ Ð¿Ð¾ Id
 app.MapGet("/api/flights/{id}", async (int id, AppDbContext db) =>
 {
     var flight = await db.Flights.FirstOrDefaultAsync(f => f.Id == id);
@@ -67,7 +67,7 @@ app.MapGet("/api/flights/{id}", async (int id, AppDbContext db) =>
     return Results.Ok(flight);
 });
 
-// ëàáà 7, ïóíêò 15
+// Ð»Ð°Ð±Ð° 7, Ð¿ÑƒÐ½ÐºÑ‚ 15
 app.MapGet("/api/flights/search", async (string? search, AppDbContext db) =>
 {
     var query = db.Flights.AsQueryable();
@@ -84,14 +84,14 @@ app.MapGet("/api/flights/search", async (string? search, AppDbContext db) =>
     return Results.Ok(flights);
 });
 
-// Áëîê 3, óðîâåíü 3: ñïèñîê ðåéñîâ + ôèëüòðàöèÿ (query-ïàðàìåòð)
+// Ð‘Ð»Ð¾Ðº 3, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 3: ÑÐ¿Ð¸ÑÐ¾Ðº Ñ€ÐµÐ¹ÑÐ¾Ð² + Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð°Ñ†Ð¸Ñ (query-Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€)
 app.MapGet("/api/flights", async (AppDbContext db) =>
 {
     var flights = await db.Flights.ToListAsync();
     return Results.Ok(flights);
 });
 
-// LINQ: ôèëüòðàöèÿ Ðåéñû äîðîæå 100
+// LINQ: Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð ÐµÐ¹ÑÑ‹ Ð´Ð¾Ñ€Ð¾Ð¶Ðµ 100
 app.MapGet("/api/flights/filter/expensive", async (AppDbContext db) =>
 {
     var flights = await db.Flights
@@ -100,7 +100,7 @@ app.MapGet("/api/flights/filter/expensive", async (AppDbContext db) =>
 
     return Results.Ok(flights);
 });
-// LINQ: ñîðòèðîâêà Ðåéñû ïî âîçðàñòàíèþ öåíû
+// LINQ: ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ° Ð ÐµÐ¹ÑÑ‹ Ð¿Ð¾ Ð²Ð¾Ð·Ñ€Ð°ÑÑ‚Ð°Ð½Ð¸ÑŽ Ñ†ÐµÐ½Ñ‹
 app.MapGet("/api/flights/sorted/by-price", async (AppDbContext db) =>
 {
     var flights = await db.Flights
@@ -109,7 +109,7 @@ app.MapGet("/api/flights/sorted/by-price", async (AppDbContext db) =>
 
     return Results.Ok(flights);
 });
-// LINQ: âûáîðêà ñ óñëîâèåì Òîëüêî äîñòóïíûå ðåéñû, îòñîðòèðîâàííûå ïî íîìåðó
+// LINQ: Ð²Ñ‹Ð±Ð¾Ñ€ÐºÐ° Ñ ÑƒÑÐ»Ð¾Ð²Ð¸ÐµÐ¼ Ð¢Ð¾Ð»ÑŒÐºÐ¾ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ðµ Ñ€ÐµÐ¹ÑÑ‹, Ð¾Ñ‚ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð¿Ð¾ Ð½Ð¾Ð¼ÐµÑ€Ñƒ
 app.MapGet("/api/flights/available", async (AppDbContext db) =>
 {
     var flights = await db.Flights
@@ -119,7 +119,7 @@ app.MapGet("/api/flights/available", async (AppDbContext db) =>
 
     return Results.Ok(flights);
 });
-// LINQ: ñîáñòâåííûé çàïðîñ Ðåéñû èç óêàçàííîãî ãîðîäà âûëåòà
+// LINQ: ÑÐ¾Ð±ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ Ð·Ð°Ð¿Ñ€Ð¾Ñ Ð ÐµÐ¹ÑÑ‹ Ð¸Ð· ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð³Ð¾Ñ€Ð¾Ð´Ð° Ð²Ñ‹Ð»ÐµÑ‚Ð°
 app.MapGet("/api/flights/from/{city}", async (string city, AppDbContext db) =>
 {
     var flights = await db.Flights
@@ -130,7 +130,7 @@ app.MapGet("/api/flights/from/{city}", async (string city, AppDbContext db) =>
     return Results.Ok(flights);
 });
 
-// Áëîê 4: POST /api/flights
+// Ð‘Ð»Ð¾Ðº 4: POST /api/flights
 app.MapPost("/api/flights", async (Flight flight, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(flight.FlightNumber) ||
@@ -140,7 +140,7 @@ app.MapPost("/api/flights", async (Flight flight, AppDbContext db) =>
     {
         return Results.BadRequest(new
         {
-            error = "Íåêîððåêòíûå äàííûå: íîìåð ðåéñà, ãîðîäà è öåíà îáÿçàòåëüíû; öåíà > 0."
+            error = "ÐÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ: Ð½Ð¾Ð¼ÐµÑ€ Ñ€ÐµÐ¹ÑÐ°, Ð³Ð¾Ñ€Ð¾Ð´Ð° Ð¸ Ñ†ÐµÐ½Ð° Ð¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹; Ñ†ÐµÐ½Ð° > 0."
         });
     }
 
@@ -155,7 +155,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// Áëîê 5, óðîâåíü 1: PUT /api/flights/{id}
+// Ð‘Ð»Ð¾Ðº 5, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 1: PUT /api/flights/{id}
 app.MapPut("/api/flights/{id}", async (int id, Flight updated, AppDbContext db) =>
 {
     var flight = await db.Flights.FirstOrDefaultAsync(f => f.Id == id);
@@ -169,7 +169,7 @@ app.MapPut("/api/flights/{id}", async (int id, Flight updated, AppDbContext db) 
     {
         return Results.BadRequest(new
         {
-            error = "Íåêîððåêòíûå äàííûå: íîìåð ðåéñà, ãîðîäà è öåíà îáÿçàòåëüíû; öåíà > 0."
+            error = "ÐÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ: Ð½Ð¾Ð¼ÐµÑ€ Ñ€ÐµÐ¹ÑÐ°, Ð³Ð¾Ñ€Ð¾Ð´Ð° Ð¸ Ñ†ÐµÐ½Ð° Ð¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹; Ñ†ÐµÐ½Ð° > 0."
         });
     }
 
@@ -184,7 +184,7 @@ app.MapPut("/api/flights/{id}", async (int id, Flight updated, AppDbContext db) 
     return Results.Ok(flight);
 });
 
-// Áëîê 5, óðîâåíü 2: DELETE /api/flights/{id}
+// Ð‘Ð»Ð¾Ðº 5, ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ 2: DELETE /api/flights/{id}
 app.MapDelete("/api/flights/{id}", async (int id, AppDbContext db) =>
 {
     var flight = await db.Flights.FirstOrDefaultAsync(f => f.Id == id);
