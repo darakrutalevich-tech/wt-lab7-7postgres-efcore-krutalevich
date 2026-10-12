@@ -55,6 +55,38 @@ namespace wt_lab7_7postgres_efcore_krutalevich.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Flights");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Arrival = "Варшава",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Departure = "Минск",
+                            FlightNumber = "AV-101",
+                            IsAvailable = true,
+                            Price = 250m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Arrival = "Берлин",
+                            CreatedAt = new DateTime(2026, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Departure = "Минск",
+                            FlightNumber = "AV-202",
+                            IsAvailable = true,
+                            Price = 320m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Arrival = "Москва",
+                            CreatedAt = new DateTime(2026, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Departure = "Гомель",
+                            FlightNumber = "AV-303",
+                            IsAvailable = false,
+                            Price = 180m
+                        });
                 });
 #pragma warning restore 612, 618
         }

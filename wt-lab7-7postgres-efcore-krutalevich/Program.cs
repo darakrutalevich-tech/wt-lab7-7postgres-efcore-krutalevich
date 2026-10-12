@@ -4,11 +4,27 @@ using wt_lab7_7postgres_efcore_krutalevich.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOpenApi();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var databaseUrl = builder.Configuration["DATABASE_URL"];
+if (!string.IsNullOrWhiteSpace(databaseUrl))
+{
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':', 2);
+
+    connectionString =
+        $"Host={uri.Host};" +
+        $"Port={uri.Port};" +
+        $"Database={uri.AbsolutePath.TrimStart('/')};" +
+        $"Username={Uri.UnescapeDataString(userInfo[0])};" +
+        $"Password={Uri.UnescapeDataString(userInfo[1])};" +
+        "SSL Mode=Disable";
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
-
-builder.Services.AddOpenApi();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -180,6 +196,6 @@ app.MapDelete("/api/flights/{id}", async (int id, AppDbContext db) =>
     return Results.NoContent();
 });
 
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
-//app.Run($"http://0.0.0.0:{port}");
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+app.Run($"http://0.0.0.0:{port}");
+//app.Run();
