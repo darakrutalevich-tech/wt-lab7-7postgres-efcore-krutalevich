@@ -40,35 +40,82 @@ app.MapGet("/api/info", () =>
 //});
 
 //Блок 3, уровень 2: рейс по Id
-app.MapGet("/api/flights/{id}", (int id) =>
+app.MapGet("/api/flights/{id}", async (int id, AppDbContext db) =>
 {
-    var flight = FlightStore.Flights.FirstOrDefault(f => f.Id == id);
+    var flight = await db.Flights.FirstOrDefaultAsync(f => f.Id == id);
+
     if (flight == null)
         return Results.NotFound();
 
     return Results.Ok(flight);
 });
 
-// Блок 3, уровень 3: список рейсов + фильтрация (query-параметр)
-app.MapGet("/api/flights", (string? search) =>
+// лаба 7, пункт 15
+app.MapGet("/api/flights/search", async (string? search, AppDbContext db) =>
 {
-    var flights = FlightStore.Flights.AsEnumerable();
+    var query = db.Flights.AsQueryable();
 
     if (!string.IsNullOrWhiteSpace(search))
     {
-        flights = flights.Where(f =>
-            f.FlightNumber.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-            f.Departure.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-            f.Arrival.Contains(search, StringComparison.OrdinalIgnoreCase));
+        query = query.Where(f =>
+            f.FlightNumber.ToLower().Contains(search.ToLower()) ||
+            f.Departure.ToLower().Contains(search.ToLower()) ||
+            f.Arrival.ToLower().Contains(search.ToLower()));
     }
+
+    var flights = await query.ToListAsync();
+    return Results.Ok(flights);
+});
+
+// Блок 3, уровень 3: список рейсов + фильтрация (query-параметр)
+app.MapGet("/api/flights", async (AppDbContext db) =>
+{
+    var flights = await db.Flights.ToListAsync();
+    return Results.Ok(flights);
+});
+
+// LINQ: фильтрация Рейсы дороже 100
+app.MapGet("/api/flights/filter/expensive", async (AppDbContext db) =>
+{
+    var flights = await db.Flights
+        .Where(f => f.Price > 100)
+        .ToListAsync();
+
+    return Results.Ok(flights);
+});
+// LINQ: сортировка Рейсы по возрастанию цены
+app.MapGet("/api/flights/sorted/by-price", async (AppDbContext db) =>
+{
+    var flights = await db.Flights
+        .OrderBy(f => f.Price)
+        .ToListAsync();
+
+    return Results.Ok(flights);
+});
+// LINQ: выборка с условием Только доступные рейсы, отсортированные по номеру
+app.MapGet("/api/flights/available", async (AppDbContext db) =>
+{
+    var flights = await db.Flights
+        .Where(f => f.IsAvailable)
+        .OrderBy(f => f.FlightNumber)
+        .ToListAsync();
+
+    return Results.Ok(flights);
+});
+// LINQ: собственный запрос Рейсы из указанного города вылета
+app.MapGet("/api/flights/from/{city}", async (string city, AppDbContext db) =>
+{
+    var flights = await db.Flights
+        .Where(f => f.Departure.ToLower() == city.ToLower())
+        .OrderBy(f => f.Price)
+        .ToListAsync();
 
     return Results.Ok(flights);
 });
 
 // Блок 4: POST /api/flights
-app.MapPost("/api/flights", (Flight flight) =>
+app.MapPost("/api/flights", async (Flight flight, AppDbContext db) =>
 {
-    // Простая валидация вручную ( для блока 6)
     if (string.IsNullOrWhiteSpace(flight.FlightNumber) ||
         string.IsNullOrWhiteSpace(flight.Departure) ||
         string.IsNullOrWhiteSpace(flight.Arrival) ||
@@ -80,8 +127,9 @@ app.MapPost("/api/flights", (Flight flight) =>
         });
     }
 
-    flight.Id = FlightStore.NextId();
-    FlightStore.Flights.Add(flight);
+    db.Flights.Add(flight);
+    await db.SaveChangesAsync();
+
     return Results.Created($"/api/flights/{flight.Id}", flight);
 });
 
@@ -91,13 +139,12 @@ if (app.Environment.IsDevelopment())
 }
 
 // Блок 5, уровень 1: PUT /api/flights/{id}
-app.MapPut("/api/flights/{id}", (int id, Flight updated) =>
+app.MapPut("/api/flights/{id}", async (int id, Flight updated, AppDbContext db) =>
 {
-    var flight = FlightStore.Flights.FirstOrDefault(f => f.Id == id);
+    var flight = await db.Flights.FirstOrDefaultAsync(f => f.Id == id);
     if (flight == null)
         return Results.NotFound();
 
-    // для блока 6
     if (string.IsNullOrWhiteSpace(updated.FlightNumber) ||
         string.IsNullOrWhiteSpace(updated.Departure) ||
         string.IsNullOrWhiteSpace(updated.Arrival) ||
@@ -115,17 +162,21 @@ app.MapPut("/api/flights/{id}", (int id, Flight updated) =>
     flight.Price = updated.Price;
     flight.IsAvailable = updated.IsAvailable;
 
+    await db.SaveChangesAsync();
+
     return Results.Ok(flight);
 });
 
 // Блок 5, уровень 2: DELETE /api/flights/{id}
-app.MapDelete("/api/flights/{id}", (int id) =>
+app.MapDelete("/api/flights/{id}", async (int id, AppDbContext db) =>
 {
-    var flight = FlightStore.Flights.FirstOrDefault(f => f.Id == id);
+    var flight = await db.Flights.FirstOrDefaultAsync(f => f.Id == id);
     if (flight == null)
         return Results.NotFound();
 
-    FlightStore.Flights.Remove(flight);
+    db.Flights.Remove(flight);
+    await db.SaveChangesAsync();
+
     return Results.NoContent();
 });
 

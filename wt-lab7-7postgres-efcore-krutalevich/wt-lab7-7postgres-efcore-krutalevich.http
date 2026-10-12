@@ -1,6 +1,101 @@
-@wt_lab7_7postgres_efcore_krutalevich_HostAddress = http://localhost:5154
+@host = http://localhost:5154
 
-GET {{wt_lab7_7postgres_efcore_krutalevich_HostAddress}}/weatherforecast/
-Accept: application/json
+### 1. Список — пусто
+GET {{host}}/api/flights
 
-###
+### 2. POST — создать рейс 1
+POST {{host}}/api/flights
+Content-Type: application/json
+
+{
+  "flightNumber": "AV-101",
+  "departure": "Минск",
+  "arrival": "Варшава",
+  "price": 250,
+  "isAvailable": true
+}
+
+### 3. POST — создать рейс 2
+POST {{host}}/api/flights
+Content-Type: application/json
+
+{
+  "flightNumber": "AV-202",
+  "departure": "Минск",
+  "arrival": "Берлин",
+  "price": 320,
+  "isAvailable": true
+}
+
+### 4. Список — уже два рейса
+GET {{host}}/api/flights
+
+### 5. GET по Id
+GET {{host}}/api/flights/1
+
+### 6. PUT — обновить
+PUT {{host}}/api/flights/1
+Content-Type: application/json
+
+{
+  "flightNumber": "AV-101-NEW",
+  "departure": "Минск",
+  "arrival": "Краков",
+  "price": 280,
+  "isAvailable": true
+}
+
+### 7. GET после PUT
+GET {{host}}/api/flights/1
+
+### 8. Поиск
+GET {{host}}/api/flights/search?search=AV
+
+### 9. DELETE
+DELETE {{host}}/api/flights/2
+
+### 10. GET удалённого — 404
+GET {{host}}/api/flights/2
+
+### 11. Список после всех операций
+GET {{host}}/api/flights
+
+
+### POST — создать рейс AV-101
+POST {{host}}/api/flights
+Content-Type: application/json
+
+{
+  "flightNumber": "AV-101",
+  "departure": "Минск",
+  "arrival": "Варшава",
+  "price": 250,
+  "isAvailable": true
+}
+
+### POST — создать рейс AV-202
+POST {{host}}/api/flights
+Content-Type: application/json
+
+{
+  "flightNumber": "AV-202",
+  "departure": "Минск",
+  "arrival": "Берлин",
+  "price": 320,
+  "isAvailable": true
+}
+
+### POST — создать рейс AV-303
+POST {{host}}/api/flights
+Content-Type: application/json
+
+{
+  "flightNumber": "AV-303",
+  "departure": "Гомель",
+  "arrival": "Москва",
+  "price": 180,
+  "isAvailable": false
+}
+
+### GET после POST — увидеть созданные рейсы
+GET {{host}}/api/flights
